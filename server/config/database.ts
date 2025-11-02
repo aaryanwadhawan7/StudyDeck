@@ -9,10 +9,8 @@ export const connectDB = async (): Promise<void> => {
     }
 
     await mongoose.connect(mongoURI);
-
     console.log("MongoDB connected successfully");
 
-    // Handle disconnection
     mongoose.connection.on("error", (err) => {
       console.error("MongoDB connection error:", err);
     });
