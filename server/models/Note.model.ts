@@ -69,4 +69,4 @@ const notesSchema = new Schema<INotes>(
   }
 );
 
-export const Notes = mongoose.model<INotes>("Notes", notesSchema);
+export const Note = mongoose.model<INotes>("Notes", notesSchema);
