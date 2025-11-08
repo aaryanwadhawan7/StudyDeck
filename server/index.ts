@@ -3,6 +3,7 @@ import { Request, Response } from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import { connectDB } from "./config/database";
+import authRoutes from "../server/routes/auth.routes";
 
 dotenv.config();
 
@@ -25,6 +26,8 @@ app.get("/health", (req: Request, res: Response) => {
     message: "Backend is running",
   });
 });
+
+app.use("/api/auth", authRoutes);
 
 app.use((err: Error, req: Request, res: Response) => {
   console.error("Error:", err.message);
