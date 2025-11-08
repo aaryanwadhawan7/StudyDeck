@@ -4,6 +4,8 @@ import cors from "cors";
 import dotenv from "dotenv";
 import { connectDB } from "./config/database";
 import authRoutes from "../server/routes/auth.routes";
+import noteRouter from "./routes/note.routes";
+import taskRouter from "./routes/task.routes";
 
 dotenv.config();
 
@@ -28,6 +30,8 @@ app.get("/health", (req: Request, res: Response) => {
 });
 
 app.use("/api/auth", authRoutes);
+app.use("/api/notes", noteRouter);
+app.use("/api/tasks", taskRouter);
 
 app.use((err: Error, req: Request, res: Response) => {
   console.error("Error:", err.message);
