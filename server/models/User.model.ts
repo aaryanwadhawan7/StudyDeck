@@ -6,6 +6,7 @@ export interface IUser extends Document {
   password: string;
   name: string;
   theme: "light" | "dark";
+  refreshToken?: string | null;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -36,6 +37,11 @@ const userSchema = new Schema<IUser>(
       type: String,
       enum: ["light", "dark"],
       default: "light",
+    },
+    refreshToken: {
+      type: String,
+      default: null,
+      select: false,
     },
   },
   {
