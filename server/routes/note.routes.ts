@@ -14,9 +14,9 @@ router.use(authenticate);
 
 // Note CRUD Operation
 router.post("/", createNote);
-router.post("/", getAllNotes);
-router.post("/:noteId", getNote);
-router.post("/:noteId", updateNote);
+router.get("/", getAllNotes);
+router.get("/:noteId", getNote);
+router.put("/:noteId", updateNote);
 router.delete("/:noteId", deleteNote);
 
 export default router;
