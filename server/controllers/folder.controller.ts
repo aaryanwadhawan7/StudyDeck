@@ -174,8 +174,6 @@ export const updateFolder = async (
     const { folderId } = req.params;
     const updateData = req.body;
 
-    // LOGIC 1: Validate parentFolder if being changed
-    // Purpose: Prevent circular references and invalid parent folders
     if (updateData.parentFolder) {
       const parent = await Folder.findOne({
         _id: updateData.parentFolder,
