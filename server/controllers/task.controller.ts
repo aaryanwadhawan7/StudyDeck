@@ -27,10 +27,12 @@ export const createTask = async (
   res: Response
 ): Promise<void> => {
   try {
+    const userId = req.userId;
     const { title, description, status, priority, dueDate } = req.body;
 
     const task = await Task.create({
       title: title,
+      userId,
       description: description || "",
       status: status || "todo",
       priority: priority || "medium",

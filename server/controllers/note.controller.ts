@@ -29,6 +29,7 @@ export const createNote = async (
   res: Response
 ): Promise<void> => {
   try {
+    const userId = req.userId;
     const { title, content, folderId, tags } = req.body;
 
     if (!title) {
@@ -41,6 +42,7 @@ export const createNote = async (
     const note = await Note.create({
       title: title,
       content: content || "",
+      userId,
       tags: tags || [],
       folderId: folderId || null,
     });
