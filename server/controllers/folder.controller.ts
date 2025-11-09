@@ -17,6 +17,7 @@ import { AuthRequest } from "../middleware/auth.middleware";
 import { Folder } from "../models/Folder.model";
 import { Response } from "express";
 import { Note } from "../models/Note.model";
+import mongoose from "mongoose";
 
 export const createFolder = async (
   req: AuthRequest,
@@ -161,5 +162,56 @@ export const deleteFolder = async (
     res.status(400).json({
       error: error,
     });
+  }
+};
+
+export const updateFolder = async (
+  req: AuthRequest,
+  res: Response
+): Promise<void> => {
+  try {
+    const userId = req.userId;
+    const { folderId } = req.params;
+    const updateData = req.body;
+
+    // LOGIC 1: Validate parentFolder if being changed
+    // Purpose: Prevent circular references and invalid parent folders
+    if (updateData.parentFolder) {
+      const parent = await Folder.findOne({
+        _id: updateData.parentFolder,
+        userId,
+      });
+      if (!parent) {
+        res.status(400).json({ error: "Parent folder not found" });
+        return;
+      }
+      // Prevent folder from being its own parent
+      if (
+        ((parent._id as string) || mongoose.Types.ObjectId).toString() ===
+        folderId
+      ) {
+        res.status(400).json({ error: "Folder cannot be its own parent" });
+        return;
+      }
+    }
+
+    const folder = await Folder.findOneAndUpdate(
+      { _id: folderId, userId },
+      updateData,
+      { new: true }
+    );
+
+    if (!folder) {
+      res.status(404).json({ error: "Folder not found" });
+      return;
+    }
+
+    res.json({
+      message: "Folder updated successfully",
+      folder,
+    });
+  } catch (error) {
+    console.error("Update folder error:", error);
+    res.status(400).json({ error: "Failed to update folder" });
   }
 };
