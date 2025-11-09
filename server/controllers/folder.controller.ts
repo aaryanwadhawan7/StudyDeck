@@ -6,16 +6,17 @@ Folder
 - color : blue color
 
 Routes/Endpoints
-- Create a folder
-- Retrieve folder
-- Update a folder
-- Delete a folder
-- Retrieve all folder
+- Create a folder (Done)
+- Retrieve folder (Done)
+- Update a folder (Done)
+- Delete a folder (Done)
+- Retrieve all folder (Done)
 */
 
 import { AuthRequest } from "../middleware/auth.middleware";
 import { Folder } from "../models/Folder.model";
 import { Response } from "express";
+import { Note } from "../models/Note.model";
 
 export const createFolder = async (
   req: AuthRequest,
@@ -84,9 +85,13 @@ export const getFolder = async (
       return;
     }
 
+    // Optionally: Check the content of the folder
+    const notes = await Note.find({ folderId, userId });
+
     res.status(200).json({
       message: "Folder retrieved successfully!",
       folder,
+      noteCount: notes.length,
     });
   } catch (error) {
     console.error("Folder details can't be accessed!", error);
@@ -105,6 +110,13 @@ export const getAllFolders = async (
       .populate("parentFolder")
       .sort({ createdAt: -1 });
 
+    if (!folders) {
+      res.status(400).json({
+        message: "Folders can't be retrieved!",
+      });
+      return;
+    }
+
     res.json({
       message: "Folders retrieved successfully",
       folders,
@@ -112,5 +124,42 @@ export const getAllFolders = async (
   } catch (error) {
     console.error("Get folders error:", error);
     res.status(500).json({ error: error });
+  }
+};
+
+export const deleteFolder = async (
+  req: AuthRequest,
+  res: Response
+): Promise<void> => {
+  try {
+    const { folderId } = req.params;
+    const userId = req.userId;
+
+    const notes = await Note.find({ folderId, userId });
+    if (notes.length > 0) {
+      res.json({
+        message: `Folder contain total ${notes.length} notes. Kindly review before deleting it!`,
+      });
+      return;
+    }
+
+    // Delete Folder and content inside it
+    const folder = await Folder.findOneAndDelete({ _id: folderId, userId });
+
+    if (!folder) {
+      res.status(400).json({
+        message: "Folder doesn't exist! Please check details of the folder!",
+      });
+      return;
+    }
+
+    res.status(200).json({
+      message: "Folder deleted successfully!",
+    });
+  } catch (error) {
+    console.error("Folder can't be deleted!", error);
+    res.status(400).json({
+      error: error,
+    });
   }
 };
