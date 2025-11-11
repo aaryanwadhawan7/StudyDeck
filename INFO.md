@@ -71,3 +71,9 @@ npx lint-staged
 ```javascript
 npm install -D concurrently
 ```
+
+- Shadcn (Changes to made in Files!)
+  - src/pages/Dashboard.tsx
+  - Enhanced Login with shadcn/ui
+
+- <b> Axios is a promise-based HTTP client for making API requests from the browser (frontend) or Node.js (backend). <b> - Making GET, POST, PUT, DELETE requests. - Setting base URLs for APIs. - Adding headers (like authorization tokens). - Automatically handling JSON request/response. - Using interceptors to modify requests or responses globally.
