@@ -1,3 +1,5 @@
+### Project Intialization and Points to Remember
+
 1. Initialize an empty npm project
 
 ```javascript
@@ -76,4 +78,18 @@ npm install -D concurrently
   - src/pages/Dashboard.tsx
   - Enhanced Login with shadcn/ui
 
-- <b> Axios is a promise-based HTTP client for making API requests from the browser (frontend) or Node.js (backend). <b> - Making GET, POST, PUT, DELETE requests. - Setting base URLs for APIs. - Adding headers (like authorization tokens). - Automatically handling JSON request/response. - Using interceptors to modify requests or responses globally.
+---
+
+### FRONTEND
+
+#### Project Flow
+
+- src/utils/api.ts (Done)
+- src/context/AuthContext.tsx
+
+9. Axios is a promise-based HTTP client for making API requests from the browser (frontend) or Node.js (backend).
+   <br> - Making GET, POST, PUT, DELETE requests.
+   <br>- Setting base URLs for APIs.
+   <br>- Adding headers (like authorization tokens).
+   <br>- Automatically handling JSON request/response.
+   <br>- Using interceptors to modify requests or responses globally.
