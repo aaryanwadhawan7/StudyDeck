@@ -3,15 +3,15 @@
 import { createContext, useContext, useState, useEffect } from "react";
 
 // User : email, name, theme, id (unique)
-interface User {
+export interface User {
   id: string;
   email: string;
   name: string;
-  theme: "light" | "dark";
+  theme?: "light" | "dark";
 }
 
 // AuthContext : Login, register, Logout, user, password, isAuthenticated, isLoading
-interface AuthContext {
+export interface AuthContext {
   user: User | null;
   isAuthenticated: boolean;
   isLoading: boolean;
@@ -83,21 +83,17 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   };
 
   // LOGIC 8: Register function
-  const register = async (email: string, password: string, name: string) => {
+  const register = async (email: string, name: string, password: string) => {
     setIsLoading(true);
     try {
       const api = await import("../utils/api").then((m) => m.default);
       const response = await api.post("/api/auth/register", {
         email,
-        password,
         name,
+        password,
       });
-
-      // Save tokens
       localStorage.setItem("accessToken", response.data.accessToken);
       localStorage.setItem("refreshToken", response.data.refreshToken);
-
-      // Set user
       setUser(response.data.user);
     } finally {
       setIsLoading(false);
