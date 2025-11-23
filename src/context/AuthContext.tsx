@@ -50,7 +50,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   }, []);
 
-  // LOGIC 6: Fetch user profile from backend
   const fetchUserProfile = async () => {
     try {
       const api = await import("../utils/api").then((m) => m.default);
@@ -64,7 +63,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   };
 
-  // LOGIC 7: Login function
   const login = async (email: string, password: string) => {
     setIsLoading(true);
     try {
@@ -82,25 +80,28 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   };
 
-  // LOGIC 8: Register function
   const register = async (email: string, name: string, password: string) => {
     setIsLoading(true);
     try {
       const api = await import("../utils/api").then((m) => m.default);
+
       const response = await api.post("/api/auth/register", {
         email,
         name,
         password,
       });
+
+      // Save tokens
       localStorage.setItem("accessToken", response.data.accessToken);
       localStorage.setItem("refreshToken", response.data.refreshToken);
+
+      // Set user
       setUser(response.data.user);
     } finally {
       setIsLoading(false);
     }
   };
 
-  // LOGIC 9: Logout function
   const logout = async () => {
     try {
       const api = await import("../utils/api").then((m) => m.default);
